@@ -15,7 +15,7 @@ public struct ErrorReporting {
 
   private static var _main: ErrorReporting?
 
-  public var destinations: [Destination]
+  private let destinations: [Destination]
 
   public init(destinations: [Destination]) {
     self.destinations = destinations
