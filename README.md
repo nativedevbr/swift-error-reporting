@@ -23,3 +23,9 @@ extension ErrorReporting.Destination {
   }
 }
 ```
+
+### Usage
+```swift
+ErrorReporting.main = ErrorReporting(destinations: [.console, .sentry, .crashlytics])
+ErrorReporting.main.report(MyCustomError())
+```
