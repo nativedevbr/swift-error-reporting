@@ -1,0 +1,7 @@
+▿ 1 key/value pair
+  ▿ (2 elements)
+    - key: "InternalError"
+    ▿ value: 1 key/value pair
+      ▿ (2 elements)
+        - key: "second"
+        - value: "10"

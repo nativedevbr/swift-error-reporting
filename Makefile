@@ -8,3 +8,6 @@ format:
 		./Tests \
 		./Package.swift
 
+.PHONY: test
+test:
+	@swift test

@@ -37,15 +37,37 @@ extension Report {
   /// )
   /// ```
   public func nsError() -> NSError {
-    let nsError = error as NSError
+    let nsError = error.nsError()
     var userInfo = nsError.userInfo
 
-    if let error = error as? Encodable,
+    var errorLocation: [String: Any] = [
+      "function": function,
+      "file": file,
+      "line": line,
+    ]
+
+    errorLocation["context"] = context
+    userInfo[ErrorLocationInfoKey] = errorLocation
+
+    return NSError(
+      domain: nsError.domain,
+      code: nsError.code,
+      userInfo: userInfo
+    )
+  }
+}
+
+extension Error {
+  public func nsError() -> NSError {
+    let nsError = self as NSError
+    var userInfo = nsError.userInfo
+
+    if let error = self as? Encodable,
       let data = try? JSONEncoder().encode(AnyEncodable(value: error))
     {
       userInfo[InternalErrorInfoKey] = try? JSONSerialization.jsonObject(with: data, options: [])
     } else {
-      let mirror = Mirror(reflecting: error)
+      let mirror = Mirror(reflecting: self)
       let childrenDict = mirror.children.compactMap {
         $0.label != nil
           ? ($0.label!, $0.value)
@@ -53,13 +75,6 @@ extension Report {
       }
       userInfo[InternalErrorInfoKey] = Dictionary(uniqueKeysWithValues: childrenDict)
     }
-
-    userInfo[ErrorLocationInfoKey] = [
-      "function": function,
-      "file": file,
-      "line": line,
-      "context": context as Any,
-    ]
 
     return NSError(
       domain: nsError.domain,
