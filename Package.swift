@@ -1,6 +1,9 @@
 // swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+// Copyright (c) native.dev.br. All rights reserved.
+// Licensed under the Apache 2.0 License. See LICENSE file in the project root for full license information.
+
 import PackageDescription
 
 let package = Package(
