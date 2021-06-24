@@ -40,12 +40,12 @@ extension Report {
     let nsError = error as NSError
     var userInfo = nsError.userInfo
 
-    if let error = self as? Encodable,
+    if let error = error as? Encodable,
       let data = try? JSONEncoder().encode(AnyEncodable(value: error))
     {
       userInfo[InternalErrorInfoKey] = try? JSONSerialization.jsonObject(with: data, options: [])
     } else {
-      let mirror = Mirror(reflecting: self)
+      let mirror = Mirror(reflecting: error)
       let childrenDict = mirror.children.compactMap {
         $0.label != nil
           ? ($0.label!, $0.value)
@@ -58,7 +58,7 @@ extension Report {
       "function": function,
       "file": file,
       "line": line,
-      "context": context,
+      "context": context as Any,
     ]
 
     return NSError(
